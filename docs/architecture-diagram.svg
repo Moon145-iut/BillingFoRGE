@@ -1,0 +1,44 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Title -->
+  <text x="400" y="30" font-size="24" font-weight="bold" text-anchor="middle">Billing Monorepo Architecture</text>
+  
+  <!-- Frontend -->
+  <rect x="50" y="80" width="300" height="200" fill="#E8F4F8" stroke="#0288D1" stroke-width="2"/>
+  <text x="200" y="110" font-size="16" font-weight="bold" text-anchor="middle">Frontend (React)</text>
+  <text x="200" y="150" font-size="12" text-anchor="middle">Admin Page</text>
+  <text x="200" y="170" font-size="12" text-anchor="middle">User Calculator</text>
+  <text x="200" y="190" font-size="12" text-anchor="middle">Components & Hooks</text>
+  <text x="200" y="210" font-size="12" text-anchor="middle">API Client (Axios)</text>
+  <text x="200" y="230" font-size="12" text-anchor="middle">React Query</text>
+  <text x="200" y="250" font-size="12" text-anchor="middle">Vite Build</text>
+  
+  <!-- Backend -->
+  <rect x="450" y="80" width="300" height="200" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="2"/>
+  <text x="600" y="110" font-size="16" font-weight="bold" text-anchor="middle">Backend (NestJS)</text>
+  <text x="600" y="150" font-size="12" text-anchor="middle">Config Module</text>
+  <text x="600" y="170" font-size="12" text-anchor="middle">Calculate Module</text>
+  <text x="600" y="190" font-size="12" text-anchor="middle">Guards & Filters</text>
+  <text x="600" y="210" font-size="12" text-anchor="middle">Prisma ORM</text>
+  <text x="600" y="230" font-size="12" text-anchor="middle">Interceptors</text>
+  <text x="600" y="250" font-size="12" text-anchor="middle">REST API</text>
+  
+  <!-- Arrow -->
+  <path d="M 350 180 L 450 180" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <text x="400" y="170" font-size="11" text-anchor="middle">HTTP/REST</text>
+  
+  <!-- Database -->
+  <rect x="200" y="380" width="400" height="120" fill="#E8F5E9" stroke="#388E3C" stroke-width="2"/>
+  <text x="400" y="410" font-size="16" font-weight="bold" text-anchor="middle">PostgreSQL Database</text>
+  <text x="400" y="450" font-size="12" text-anchor="middle">Config Table</text>
+  <text x="400" y="470" font-size="12" text-anchor="middle">Migrations (Prisma)</text>
+  
+  <!-- Connections to DB -->
+  <path d="M 600 280 L 400 380" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <!-- Define arrow marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#333" />
+    </marker>
+  </defs>
+</svg>

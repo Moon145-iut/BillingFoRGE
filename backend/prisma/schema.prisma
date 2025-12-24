@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model BillingConfig {
+  id            Int      @id @default(autoincrement())
+  baseRate      Decimal  @db.Decimal(10, 2)
+  taxRate       Decimal  @db.Decimal(5, 2)
+  serviceCharge Decimal  @db.Decimal(10, 2)
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("billing_configs")
+}
+
+model AdminOtp {
+  id               Int      @id @default(autoincrement())
+  email            String
+  code             String
+  expiresAt        DateTime
+  consumed         Boolean  @default(false)
+  sessionToken     String?
+  sessionExpiresAt DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
