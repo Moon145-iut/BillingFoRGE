@@ -128,6 +128,29 @@ When the backend is running, visit: `http://localhost:3000/api`
 ### Frontend
 - `VITE_API_BASE_URL` - Backend API base URL
 
+## Deployment
+
+- Frontend: https://billing-fo-rge-frontend.vercel.app
+- Backend API: https://billingforge.onrender.com
+
+Make sure the following environment variables are set in your hosting providers:
+
+- On Render (backend service):
+	- `FRONTEND_URL=https://billing-fo-rge-frontend.vercel.app`  (used for CORS)
+	- SMTP variables for sending OTPs (example using Gmail SMTP):
+		- `SMTP_HOST=smtp.gmail.com`
+		- `SMTP_PORT=587`
+		- `SMTP_USER=you@example.com`
+		- `SMTP_PASS=<16-character app password>`
+		- `SMTP_FROM="Billing App <you@example.com>"`
+
+- On Vercel (frontend project):
+	- `VITE_API_BASE_URL=https://billingforge.onrender.com`
+
+After updating env vars, redeploy both services so the frontend build and backend runtime pick up the new values.
+
+If OTP emails fail in production, double-check SMTP credentials (Gmail app password or Mailtrap credentials), redeploy the backend, and review the backend logs for SMTP authentication errors.
+
 ## License
 
 MIT
