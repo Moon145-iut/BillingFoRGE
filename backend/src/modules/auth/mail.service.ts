@@ -24,8 +24,8 @@ export class MailService implements OnModuleInit {
     try {
       await this.transporter.verify();
       console.log('SMTP transporter verified successfully.');
-    } catch (err) {
-      console.error('SMTP transporter verification failed:', err);
+    } catch (error) {
+      console.error('SMTP transporter verification failed:', error);
     }
   }
 
@@ -55,13 +55,13 @@ export class MailService implements OnModuleInit {
           SMTP_FROM: process.env.SMTP_FROM,
         },
       };
-    } catch (err: unknown) {
-      const error = err as any;
+    } catch (error) {
+      const err = error as { message?: string; code?: string; responseCode?: string };
       return {
         status: 'error',
-        message: error?.message || 'Unknown error',
-        code: error?.code,
-        responseCode: error?.responseCode,
+        message: err?.message || 'Unknown error',
+        code: err?.code,
+        responseCode: err?.responseCode,
         config: {
           SMTP_HOST: process.env.SMTP_HOST,
           SMTP_PORT: process.env.SMTP_PORT,
@@ -88,4 +88,3 @@ export class MailService implements OnModuleInit {
     });
   }
 }
-
