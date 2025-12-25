@@ -55,12 +55,13 @@ export class MailService implements OnModuleInit {
           SMTP_FROM: process.env.SMTP_FROM,
         },
       };
-    } catch (err) {
+    } catch (err: unknown) {
+      const error = err as any;
       return {
         status: 'error',
-        message: err.message,
-        code: err.code,
-        responseCode: err.responseCode,
+        message: error?.message || 'Unknown error',
+        code: error?.code,
+        responseCode: error?.responseCode,
         config: {
           SMTP_HOST: process.env.SMTP_HOST,
           SMTP_PORT: process.env.SMTP_PORT,
