@@ -35,6 +35,11 @@ const UserPage: React.FC = () => {
       </header>
 
       {configError && <div className="alert alert-error">{configError}</div>}
+      {config?.isDefault && (
+        <div className="alert">
+          The admin has not customized rates yet. Showing default configuration.
+        </div>
+      )}
 
       <section className="stat-grid">
         <article className="stat-card">

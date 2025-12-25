@@ -63,6 +63,12 @@ const AdminPage: React.FC = () => {
     setConfig(cfg);
   };
 
+  const handleReset = async () => {
+    if (!window.confirm('Reset to default configuration?')) return;
+    const defaults = await coreApi.resetConfig();
+    setConfig(defaults);
+  };
+
   if (!session) {
     return (
       <div className="admin-access">
@@ -136,6 +142,15 @@ const AdminPage: React.FC = () => {
 
       <section className="admin-card">
         <AdminForm config={config} onSaved={handleSaved} />
+        <button
+          className="ghost-btn"
+          type="button"
+          onClick={handleReset}
+          disabled={!config || config.isDefault}
+          style={{ marginTop: '1rem' }}
+        >
+          Reset to Defaults
+        </button>
       </section>
     </div>
   );

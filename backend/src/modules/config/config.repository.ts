@@ -25,6 +25,7 @@ export class ConfigRepository {
       data: {
         baseRate: data.baseRate,
         taxRate: data.taxRate,
+        discount: 0,
         serviceCharge: data.serviceCharge,
         active: true,
       },
@@ -35,5 +36,9 @@ export class ConfigRepository {
     return this.prisma.billingConfig.findUnique({
       where: { id },
     });
+  }
+
+  async deleteAll() {
+    await this.prisma.billingConfig.deleteMany({});
   }
 }

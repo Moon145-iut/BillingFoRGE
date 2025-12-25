@@ -13,7 +13,7 @@ export class AdminSessionGuard implements CanActivate {
       throw new UnauthorizedException('Missing admin session token');
     }
 
-    const session = await this.prisma.adminOtp.findFirst({
+    const session = await this.prisma.admin_otps.findFirst({
       where: {
         sessionToken: token,
         sessionExpiresAt: { gt: new Date() },

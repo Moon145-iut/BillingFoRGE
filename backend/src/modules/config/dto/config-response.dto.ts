@@ -21,4 +21,7 @@ export class ConfigResponseDto {
 
   @ApiProperty({ type: Date })
   updatedAt!: Date;
+
+  @ApiProperty({ example: false })
+  isDefault!: boolean;
 }

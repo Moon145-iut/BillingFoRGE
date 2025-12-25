@@ -14,11 +14,13 @@ export class AuthService {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = addMinutes(new Date(), 10);
 
-    await this.prisma.adminOtp.create({
+    await this.prisma.admin_otps.create({
       data: {
         email: dto.email,
         code,
         expiresAt,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     });
 
@@ -28,7 +30,7 @@ export class AuthService {
   }
 
   async verifyOtp(dto: VerifyOtpDto) {
-    const record = await this.prisma.adminOtp.findFirst({
+    const record = await this.prisma.admin_otps.findFirst({
       where: {
         email: dto.email,
         consumed: false,
@@ -51,7 +53,7 @@ export class AuthService {
     const sessionToken = randomUUID();
     const sessionExpiresAt = addHours(new Date(), 12);
 
-    await this.prisma.adminOtp.update({
+    await this.prisma.admin_otps.update({
       where: { id: record.id },
       data: {
         consumed: true,
@@ -65,7 +67,7 @@ export class AuthService {
 
   async validateSession(token: string) {
     if (!token) return null;
-    return this.prisma.adminOtp.findFirst({
+    return this.prisma.admin_otps.findFirst({
       where: {
         sessionToken: token,
         sessionExpiresAt: { gt: new Date() },

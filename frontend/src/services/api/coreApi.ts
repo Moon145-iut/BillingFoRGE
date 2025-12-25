@@ -8,6 +8,7 @@ export interface ConfigResponse {
   active: boolean;
   createdAt: string;
   updatedAt: string;
+  isDefault: boolean;
 }
 
 export interface CalculateRequest {
@@ -30,7 +31,9 @@ export const coreApi = {
     return data;
   },
 
-  createConfig: async (config: Omit<ConfigResponse, 'id' | 'active' | 'createdAt' | 'updatedAt'>): Promise<ConfigResponse> => {
+  createConfig: async (
+    config: Omit<ConfigResponse, 'id' | 'active' | 'createdAt' | 'updatedAt' | 'isDefault'>,
+  ): Promise<ConfigResponse> => {
     const { data } = await axiosInstance.post('/api/config', config);
     return data;
   },
@@ -48,5 +51,10 @@ export const coreApi = {
   verifyAdminOtp: async (email: string, code: string) => {
     const { data } = await axiosInstance.post('/api/auth/verify-otp', { email, code });
     return data as { sessionToken: string; expiresAt: string };
+  },
+
+  resetConfig: async (): Promise<ConfigResponse> => {
+    const { data } = await axiosInstance.delete('/api/config');
+    return data;
   },
 };
