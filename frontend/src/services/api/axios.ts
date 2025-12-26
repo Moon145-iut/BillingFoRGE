@@ -1,6 +1,17 @@
 import axios from 'axios';
 
-const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const normalizedEnvBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim().replace(/\/$/, '');
+const fallbackBaseUrl =
+  typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
+
+if (!normalizedEnvBaseUrl) {
+  // eslint-disable-next-line no-console
+  console.warn(
+    '[coreApi] VITE_API_BASE_URL is not defined. Falling back to window.origin/localhost.',
+  );
+}
+
+const baseURL = normalizedEnvBaseUrl || fallbackBaseUrl;
 
 const axiosInstance = axios.create({
   baseURL,

@@ -149,6 +149,27 @@ Make sure the following environment variables are set in your hosting providers:
 
 The frontend deployment also includes a SPA fallback configuration in `frontend/vercel.json`. Keep this file in the Vercel project root (the `frontend` directory) so every client-side route such as `/admin` resolves to `index.html`. Without the rewrite, Vercel returns `NOT_FOUND` whenever someone refreshes or deep-links into a nested route.
 
+### Connecting Frontend <-> Backend Locally
+
+1. Start the backend (`pnpm --filter backend dev`). Confirm `http://localhost:3000/api/config` returns JSON.
+2. Start the frontend (`pnpm --filter frontend dev`). The Vite dev server proxies fetches through the base URL set in `frontend/.env`.
+3. Ensure both `.env` files contain matching origins:
+   - Backend `FRONTEND_URL=http://localhost:5173`
+   - Frontend `VITE_API_BASE_URL=http://localhost:3000`
+4. When `VITE_API_BASE_URL` is missing, the frontend will fall back to `window.location.origin`. That allows same-origin deployments (e.g., when the frontend is served behind a reverse proxy) but you should still set the explicit variable in every environment to avoid surprises.
+5. OTP/auth flow:
+   - Call `POST /api/auth/request-otp` with your email; check SMTP logs/mailbox.
+   - Use the received code with `POST /api/auth/verify-otp` to obtain `sessionToken`. The frontend stores this token in `localStorage` and automatically injects it in the `x-admin-session` header for privileged requests (`/api/config`, delete/reset).
+
+### Testing with Swagger
+
+- Swagger UI is hosted at `http://localhost:3000/api` locally (or `https://billingforge.onrender.com/api` in production).
+- Use it to exercise every endpoint, including the OTP flow:
+  1. `POST /api/auth/request-otp`
+  2. `POST /api/auth/verify-otp` (copy the code from email/SMS/logs)
+  3. Click the "Authorize" button and provide the `sessionToken` as the value for the `x-admin-session` header.
+- Once authorized, you can test `POST /api/config`, `DELETE /api/config`, and `POST /api/calculate` directly from Swagger to ensure the backend is healthy before pointing the frontend at it.
+
 After updating env vars, redeploy both services so the frontend build and backend runtime pick up the new values.
 
 If OTP emails fail in production, double-check SMTP credentials (Gmail app password or Mailtrap credentials), redeploy the backend, and review the backend logs for SMTP authentication errors.
