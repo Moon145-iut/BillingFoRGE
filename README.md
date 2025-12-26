@@ -147,6 +147,8 @@ Make sure the following environment variables are set in your hosting providers:
 - On Vercel (frontend project):
 	- `VITE_API_BASE_URL=https://billingforge.onrender.com`
 
+The frontend deployment also includes a SPA fallback configuration in `frontend/vercel.json`. Keep this file in the Vercel project root (the `frontend` directory) so every client-side route such as `/admin` resolves to `index.html`. Without the rewrite, Vercel returns `NOT_FOUND` whenever someone refreshes or deep-links into a nested route.
+
 After updating env vars, redeploy both services so the frontend build and backend runtime pick up the new values.
 
 If OTP emails fail in production, double-check SMTP credentials (Gmail app password or Mailtrap credentials), redeploy the backend, and review the backend logs for SMTP authentication errors.
