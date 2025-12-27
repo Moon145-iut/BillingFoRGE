@@ -25,6 +25,11 @@ export interface CalculateResponse {
   configId: number;
 }
 
+export interface RequestOtpResponse {
+  message: string;
+  otp: string;
+}
+
 export const coreApi = {
   getActiveConfig: async (): Promise<ConfigResponse> => {
     const { data } = await axiosInstance.get('/api/config');
@@ -43,7 +48,7 @@ export const coreApi = {
     return data;
   },
 
-  requestAdminOtp: async (email: string) => {
+  requestAdminOtp: async (email: string): Promise<RequestOtpResponse> => {
     const { data } = await axiosInstance.post('/api/auth/request-otp', { email });
     return data;
   },

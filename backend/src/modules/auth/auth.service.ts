@@ -2,13 +2,12 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { addMinutes, addHours, isBefore } from 'date-fns';
 import { PrismaService } from '../../prisma/prisma.service';
-import { MailService } from './mail.service';
 import { RequestOtpDto } from './dto/request-otp.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private mailService: MailService) {}
+  constructor(private prisma: PrismaService) {}
 
   async requestOtp(dto: RequestOtpDto) {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -24,9 +23,7 @@ export class AuthService {
       },
     });
 
-    await this.mailService.sendOtp(dto.email, code);
-
-    return { message: 'OTP sent to your email.' };
+    return { message: 'OTP generated successfully.', otp: code };
   }
 
   async verifyOtp(dto: VerifyOtpDto) {

@@ -40,9 +40,11 @@ const AdminPage: React.FC = () => {
     event.preventDefault();
     setOtpError(null);
     try {
-      await coreApi.requestAdminOtp(email);
+      const { otp } = await coreApi.requestAdminOtp(email);
+      setOtpCode(otp);
       setOtpSent(true);
-      setOtpMessage('OTP sent! Check your inbox.');
+      setOtpMessage('Enter the OTP shown in the popup.');
+      window.alert(`Your one-time passcode is ${otp}`);
     } catch (error: any) {
       setOtpError(error?.response?.data?.message || 'Unable to send OTP.');
     }
