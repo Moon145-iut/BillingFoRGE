@@ -147,7 +147,7 @@ Make sure the following environment variables are set in your hosting providers:
 - On Vercel (frontend project):
 	- `VITE_API_BASE_URL=https://billingforge.onrender.com`
 
-The frontend deployment also includes a SPA fallback configuration in `frontend/vercel.json`. Keep this file in the Vercel project root (the `frontend` directory) so every client-side route such as `/admin` resolves to `index.html`. Without the rewrite, Vercel returns `NOT_FOUND` whenever someone refreshes or deep-links into a nested route.
+The frontend deployment includes a SPA fallback configuration in **both** `vercel.json` (repo root) and `frontend/vercel.json`. Keep whichever file matches your Vercel root directory so every client-side route such as `/admin` resolves to `index.html`. Each file now uses the schema-compliant pattern `source: "/((?!api/).*)", destination: "/index.html"` so Vercel accepts the rewrite during deployment. Without it, Vercel returns `NOT_FOUND` whenever someone refreshes or deep-links into a nested route.
 
 ### Connecting Frontend <-> Backend Locally
 
@@ -156,7 +156,7 @@ The frontend deployment also includes a SPA fallback configuration in `frontend/
 3. Ensure both `.env` files contain matching origins:
    - Backend `FRONTEND_URL=http://localhost:5173`
    - Frontend `VITE_API_BASE_URL=http://localhost:3000`
-4. When `VITE_API_BASE_URL` is missing, the frontend will fall back to `window.location.origin`. That allows same-origin deployments (e.g., when the frontend is served behind a reverse proxy) but you should still set the explicit variable in every environment to avoid surprises.
+4. When `VITE_API_BASE_URL` is missing, the frontend falls back to `window.location.origin` locally and to `https://billingforge.onrender.com` automatically when it detects it is running on a Vercel-hosted domain. You should still set the explicit variable in every environment, but the guard prevents "Content unavailable. Resource was not cached" errors when someone forgets to configure it.
 5. OTP/auth flow:
    - Call `POST /api/auth/request-otp` with your email; check SMTP logs/mailbox.
    - Use the received code with `POST /api/auth/verify-otp` to obtain `sessionToken`. The frontend stores this token in `localStorage` and automatically injects it in the `x-admin-session` header for privileged requests (`/api/config`, delete/reset).

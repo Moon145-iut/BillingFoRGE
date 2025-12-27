@@ -1,17 +1,34 @@
 import axios from 'axios';
 
+const PRODUCTION_BACKEND_URL = 'https://billingforge.onrender.com';
+
 const normalizedEnvBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim().replace(/\/$/, '');
-const fallbackBaseUrl =
-  typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
+
+const resolveBaseUrl = () => {
+  if (normalizedEnvBaseUrl) {
+    return normalizedEnvBaseUrl;
+  }
+
+  if (typeof window === 'undefined') {
+    return 'http://localhost:3000';
+  }
+
+  const host = window.location.hostname;
+  const isVercelHost = host === 'billing-fo-rge-frontend.vercel.app' || host.endsWith('.vercel.app');
+
+  if (isVercelHost) {
+    return PRODUCTION_BACKEND_URL;
+  }
+
+  return window.location.origin;
+};
+
+const baseURL = resolveBaseUrl();
 
 if (!normalizedEnvBaseUrl) {
   // eslint-disable-next-line no-console
-  console.warn(
-    '[coreApi] VITE_API_BASE_URL is not defined. Falling back to window.origin/localhost.',
-  );
+  console.warn('[coreApi] Falling back to derived API base URL:', baseURL);
 }
-
-const baseURL = normalizedEnvBaseUrl || fallbackBaseUrl;
 
 const axiosInstance = axios.create({
   baseURL,
