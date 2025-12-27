@@ -20,9 +20,33 @@ async function bootstrap() {
     }),
   );
 
-  // Enable CORS
+  // Enable CORS with support for preview deployments
+  const explicitOrigins = [
+    process.env.FRONTEND_URL?.trim().replace(/\/$/, ''),
+    process.env.FRONTEND_PREVIEW_URL?.trim().replace(/\/$/, ''),
+    'http://localhost:5173',
+  ].filter(Boolean) as string[];
+
+  const vercelProjectSlug = (process.env.FRONTEND_VERCEL_PROJECT || 'billing-fo-rge-frontend').trim();
+
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      const normalizedOrigin = origin.replace(/\/$/, '');
+
+      const isExplicit = explicitOrigins.includes(normalizedOrigin);
+      const isVercelPreview =
+        normalizedOrigin.endsWith('.vercel.app') && normalizedOrigin.includes(vercelProjectSlug);
+
+      if (isExplicit || isVercelPreview) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`Origin ${origin} not allowed by CORS`));
+    },
     credentials: true,
   });
 
